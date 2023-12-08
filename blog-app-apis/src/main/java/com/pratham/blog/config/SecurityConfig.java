@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
@@ -49,8 +50,8 @@ public class SecurityConfig{
 		csrf()
 		.disable()
 		.authorizeHttpRequests()
-		.antMatchers(PUBLIC_URLS).permitAll()
-		.antMatchers(HttpMethod.GET)
+		.requestMatchers(PUBLIC_URLS).permitAll()
+		.requestMatchers(HttpMethod.GET)
 		.permitAll()
 		.anyRequest()
 		.authenticated()
@@ -78,5 +79,9 @@ public class SecurityConfig{
 		provider.setUserDetailsService(this.customUserDetailService);
 		provider.setPasswordEncoder(passwordEncoder());
 		return provider;
+	}
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }
